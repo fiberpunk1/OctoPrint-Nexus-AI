@@ -163,5 +163,5 @@ def __plugin_load__():
         "octoprint.comm.protocol.atcommand.queuing": __plugin_implementation__.process_at_command
     }
 
-    # global __plugin_helpers__
+    global __plugin_helpers__
     __plugin_helpers__ = {'check_bed': __plugin_implementation__.check_bed}
