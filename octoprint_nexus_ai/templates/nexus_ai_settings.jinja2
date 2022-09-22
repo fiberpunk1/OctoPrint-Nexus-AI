@@ -1,6 +1,6 @@
 <h4>Nexus AI-0.8.6 <small>{{ _('Version') }} {{ plugin_nexus_ai_plugin_version }}</small></h4>
 <div class="row-fluid">
-    <div class="well"><p>For the plugin to work properly add <span class="label label-info">@BEDREADY</span> at the beginning of your slicer's start gcode. For best results add gcode to your slicer's end gcode to position the head out of the way for the next comparison.</p><p><span class="label label-important">NOTE:</span> Lighting, camera view angle changes, and filament color that is similar to the bed can impact accuracy; adjust the Match Percentage setting below to compensate.</p></div>
+    <div class="well"><p>Before use this plugin, please make sure the PC  <span class="label label-info">NexusAI</span> service was opened.</p></div>
 </div>
 <div class="well alert-danger" data-bind="visible: !snapshot_valid()"><p>Invalid Snapshot URL configured in <a href="javascript:void(0)" data-bind="click: function(){ settingsViewModel.show('#settings_webcam'); }">Webcam & Timelapse</a> settings. That setting must be configured with a full url for this plugin (as well as timelapse) to function properly.</p></div>
 <form class="form-vertical" id="settings_plugin_nexus_ai_form" data-bind="visible: snapshot_valid()">

@@ -35,7 +35,7 @@ $(function () {
             if (data.hasOwnProperty('similarity') && !data.bed_clear) {
                 self.popup_options.text = '<div class="row-fluid"><p>Match percentage calculated as <span class="label label-warning">' + (parseFloat(data.similarity) * 100).toFixed(2) + '%</span>.</p><p>Print job has been paused, check bed and then resume.</p><p><img src="/plugin/nexus_ai/images/compare.jpg?' + Math.round(new Date().getTime() / 1000) + '"></p></div>';
                 self.popup_options.type = 'error';
-                self.popup_options.title = 'Bed Not Ready';
+                self.popup_options.title = 'Detect failed';
                 if (self.popup === undefined) {
                     self.popup = PNotify.singleButtonNotify(self.popup_options);
                 } else {
@@ -50,7 +50,7 @@ $(function () {
             } else if (data.hasOwnProperty('error')) {
                 self.popup_options.text = 'There was an error: ' + data.error.error;
                 self.popup_options.type = 'error';
-                self.popup_options.title = 'Bed Ready Error';
+                self.popup_options.title = 'Nexus Error';
                 if (self.popup === undefined) {
                     self.popup = PNotify.singleButtonNotify(self.popup_options);
                 } else {
@@ -92,7 +92,7 @@ $(function () {
                             self.popup_options.type = 'success';
                         }
 
-                        self.popup_options.title = 'Bed Ready Test';
+                        self.popup_options.title = 'Nexus AI Test';
                         if (self.popup === undefined) {
                             self.popup = PNotify.singleButtonNotify(self.popup_options);
                         } else {

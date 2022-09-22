@@ -10,7 +10,7 @@ import json
 from octoprint.events import Events
 
 
-class BedReadyPlugin(octoprint.plugin.SettingsPlugin,
+class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                      octoprint.plugin.AssetPlugin,
                      octoprint.plugin.TemplatePlugin,
                      octoprint.plugin.SimpleApiPlugin,
@@ -134,28 +134,27 @@ class BedReadyPlugin(octoprint.plugin.SettingsPlugin,
     def get_update_information(self):
         return {
             "nexus_ai": {
-                "displayName": "Bed Ready",
+                "displayName": "Nexus AI",
                 "displayVersion": self._plugin_version,
 
                 # version check: github repository
                 "type": "github_release",
-                "user": "jneilliii",
-                "repo": "OctoPrint-BedReady",
+                "user": "fiberpunk",
+                "repo": "OctoPrint-Nexus-AI",
                 "current": self._plugin_version,
 
-                # update method: pip
-                # "pip": "https://github.com/jneilliii/OctoPrint-BedReady/archive/{target_version}.zip",
+
             }
         }
 
 
-__plugin_name__ = "Bed Ready"
-__plugin_pythoncompat__ = ">=3.6,<4"  # Only Python 3
+__plugin_name__ = "Nexus AI"
+__plugin_pythoncompat__ = ">=3.6,<4" 
 
 
 def __plugin_load__():
     global __plugin_implementation__
-    __plugin_implementation__ = BedReadyPlugin()
+    __plugin_implementation__ = NexusAIPlugin()
 
     global __plugin_hooks__
     __plugin_hooks__ = {
