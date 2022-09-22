@@ -160,8 +160,8 @@ def __plugin_load__():
     __plugin_hooks__ = {
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
         "octoprint.server.http.routes": __plugin_implementation__.route_hook,
-        # "octoprint.comm.protocol.atcommand.queuing": __plugin_implementation__.process_at_command
+        "octoprint.comm.protocol.atcommand.queuing": __plugin_implementation__.process_at_command
     }
 
     # global __plugin_helpers__
-    # __plugin_helpers__ = {'check_bed': __plugin_implementation__.check_bed}
+    __plugin_helpers__ = {'check_bed': __plugin_implementation__.check_bed}
