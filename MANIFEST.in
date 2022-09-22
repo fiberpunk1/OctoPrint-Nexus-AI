@@ -1,0 +1,4 @@
+include README.md
+recursive-include octoprint_nexus_ai/templates *
+recursive-include octoprint_nexus_ai/translations *
+recursive-include octoprint_nexus_ai/static *

@@ -1,0 +1,28 @@
+<h4>Nexus AI-0.8.6 <small>{{ _('Version') }} {{ plugin_nexus_ai_plugin_version }}</small></h4>
+<div class="row-fluid">
+    <div class="well"><p>For the plugin to work properly add <span class="label label-info">@BEDREADY</span> at the beginning of your slicer's start gcode. For best results add gcode to your slicer's end gcode to position the head out of the way for the next comparison.</p><p><span class="label label-important">NOTE:</span> Lighting, camera view angle changes, and filament color that is similar to the bed can impact accuracy; adjust the Match Percentage setting below to compensate.</p></div>
+</div>
+<div class="well alert-danger" data-bind="visible: !snapshot_valid()"><p>Invalid Snapshot URL configured in <a href="javascript:void(0)" data-bind="click: function(){ settingsViewModel.show('#settings_webcam'); }">Webcam & Timelapse</a> settings. That setting must be configured with a full url for this plugin (as well as timelapse) to function properly.</p></div>
+<form class="form-vertical" id="settings_plugin_nexus_ai_form" data-bind="visible: snapshot_valid()">
+    <div class="control-group">
+        <label class="control-label">{{ _('Reference Image') }}</label>
+        <div class="controls">
+            <img src="" alt="bed snapshot" data-bind="visible: settingsViewModel.settings.plugins.nexus_ai.reference_image().length > 0, attr: {src: settingsViewModel.settings.plugins.nexus_ai.reference_image}, style: {'padding-bottom': (settingsViewModel.settings.plugins.nexus_ai.reference_image_timestamp().length > 0) ? '' : '10px'}">
+            <p data-bind="visible: settingsViewModel.settings.plugins.nexus_ai.reference_image_timestamp().length > 0"><small>Last saved: <span data-bind="text: settingsViewModel.settings.plugins.nexus_ai.reference_image_timestamp"></span></small></p>
+            <button class="btn btn-primary" data-bind="click: take_snapshot, enable: !taking_snapshot(), css: {disabled: taking_snapshot()}"><i class="fas" data-bind="css: {'fa-spinner fa-spin': taking_snapshot(), 'fa-camera': !taking_snapshot()}"></i> {{ _('Take Request) }}</button>
+        </div>
+    </div>
+
+	<div class="control-group">
+        <label class="control-label">{{ _('Nexus AI IP Address:') }}</label>
+        <input type="text" class="btn btn-default" id="ip-lineedit" placeholder="Input Nexus AI IP Address" data-bind="value: settingsViewModel.settings.plugins.nexus_ai.nexus_ai_ip">
+        <label class="control-label">{{ _('Request Interval Time(s)') }}</label>
+		<div class="controls">
+            <select data-bind="value: settingsViewModel.settings.plugins.nexus_ai.request_interval_time">
+                <option value=2>2</option>
+                <option value=4>4</option>
+                <option value=6>6</option>
+            </select>
+        </div>
+	</div>
+</form>

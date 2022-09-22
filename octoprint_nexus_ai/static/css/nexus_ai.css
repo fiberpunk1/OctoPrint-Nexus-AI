@@ -1,0 +1,5 @@
+div.ui-pnotify.nexus_ai_notice > div.ui-pnotify-container > div.ui-pnotify-icon > span.icon-warning-sign,
+div.ui-pnotify.nexus_ai_notice > div.ui-pnotify-container > div.ui-pnotify-icon > span.icon-info-sign
+{
+    padding-top: 3px;
+}
