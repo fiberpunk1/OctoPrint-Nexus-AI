@@ -9,7 +9,7 @@
         <div class="controls">
             <img src="" alt="bed snapshot" data-bind="visible: settingsViewModel.settings.plugins.nexus_ai.reference_image().length > 0, attr: {src: settingsViewModel.settings.plugins.nexus_ai.reference_image}, style: {'padding-bottom': (settingsViewModel.settings.plugins.nexus_ai.reference_image_timestamp().length > 0) ? '' : '10px'}">
             <p data-bind="visible: settingsViewModel.settings.plugins.nexus_ai.reference_image_timestamp().length > 0"><small>Last saved: <span data-bind="text: settingsViewModel.settings.plugins.nexus_ai.reference_image_timestamp"></span></small></p>
-            <button class="btn btn-primary" data-bind="click: take_snapshot, enable: !taking_snapshot(), css: {disabled: taking_snapshot()}"><i class="fas" data-bind="css: {'fa-spinner fa-spin': taking_snapshot(), 'fa-camera': !taking_snapshot()}"></i> {{ _('Take Request) }}</button>
+            <button class="btn btn-primary" data-bind="click: take_snapshot, enable: !taking_snapshot(), css: {disabled: taking_snapshot()}"><i class="fas" data-bind="css: {'fa-spinner fa-spin': taking_snapshot(), 'fa-camera': !taking_snapshot()}"></i> {{ _('Take Request') }}</button>
         </div>
     </div>
 
