@@ -148,7 +148,7 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
         }
 
 
-__plugin_name__ = "Octoprint_Nexus_AI"
+__plugin_name__ = "Nexus AI"
 __plugin_pythoncompat__ = ">=3.6,<4" 
 
 
