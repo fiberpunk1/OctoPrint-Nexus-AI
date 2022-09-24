@@ -8,19 +8,43 @@ import os
 import datetime
 import json
 from octoprint.events import Events
+from octoprint.util import RepeatedTimer
+from email.message import EmailMessage
+from email.utils import formatdate
+
 
 
 class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                      octoprint.plugin.AssetPlugin,
+                     octoprint.plugin.StartupPlugin,
                      octoprint.plugin.TemplatePlugin,
                      octoprint.plugin.SimpleApiPlugin,
                      octoprint.plugin.EventHandlerPlugin
                      ):
 
+    def __init__(self):
+        self.repeated_timer = None
+        self.refer_result = None  #nexus_ai's refer result
+        self.octotext_email = None
+
+    def _timer_task(self):
+        self.nexus_ai_request()
+
+    # ~~ StartupPlugin API
+    def on_after_startup(self):
+        helpers = self._plugin_manager.get_helpers("OctoText", "send_email")
+        if helpers and "send_email" in helpers:
+            self.octotext_email = helpers["send_email"]
+            self._logger.info("Fiberpunk: get OctoText plugin helpers")
+
     # ~~ EventHandlerPlugin mixin
 
     def on_event(self, event, payload):
-        pass
+        if event == Events.PRINT_STARTED:
+            self.repeated_timer = RepeatedTimer(self._settings.get["request_interval_time"], self._timer_task)
+            self.repeated_timer.start()
+        elif (event == Events.PRINT_CANCELLED) or (event == Events.PRINT_DONE) or (event == Events.PRINT_FAILED):
+            self.repeated_timer.cancel()
 
     # ~~ SimpleApiPlugin mixin
 
@@ -28,42 +52,53 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
         return dict(
             take_snapshot=[]
         )
+    
+    def nexus_ai_request(self):
+        relative_url = self.take_snapshot("reference.jpg")
+        if "reference_image" in relative_url:
+            reference_image_timestamp = "{:%m/%d/%Y %H:%M:%S}".format(datetime.datetime.now())
+            self._settings.set(["reference_image_timestamp"], reference_image_timestamp)
+            self._settings.set(["reference_image"], relative_url["url"])
+            relative_url["reference_image_timestamp"] = reference_image_timestamp
+            self._settings.save()
+
+            ip_address = self._settings.get(["nexus_ai_ip"])
+            request_url = "http://{}:8002/upload".format(ip_address)
+            result_img_url = "http://{}:8002/result.jpg".format(ip_address)
+            upload_img = {"media": open(relative_url["reference_image"],"rb")}
+            self._logger.info("Fiberpunk Nexus AI :")
+            self._logger.info(relative_url["reference_image"])
+            self._logger.info(ip_address)
+            self._logger.info(request_url)
+            if len(ip_address)>2:
+                try:
+                    response = requests.post(request_url, files=upload_img, timeout=5)
+                    self._logger.info(response.text)
+                    result_json = json.loads(response.text)
+                    self._logger.info("Fiberpunk Nexus AI result count:")
+                    self._logger.info(result_json["result_count"])
+                    if result_json["result_count"]>0:
+                        download_file_name = os.path.join(self.get_plugin_data_folder(), "result.jpg")
+                        response = requests.get(result_img_url, timeout=20)
+                        if response.status_code == 200:
+                            with open(download_file_name, "wb") as f:
+                                f.write(response.content)
+                            if os.path.exists(download_file_name):
+                                relative_url = {filetype: download_file_name, "url": "plugin/nexus_ai/images/{}?{:%Y%m%d%H%M%S}".format("result.jpg", datetime.datetime.now())}
+
+                    
+                except requests.exceptions.ConnectionError:
+                    self._logger.info("Fiberpunk Nexus AI : requests connect error")
+                except:
+                    self._logger.info("Fiberpunk Nexus AI : unknow error")     
+            return relative_url
 
     def on_api_command(self, command, data):
         import flask
 
         if command == "take_snapshot":
-            relative_url = self.take_snapshot("reference.jpg")
-            if "reference_image" in relative_url:
-                reference_image_timestamp = "{:%m/%d/%Y %H:%M:%S}".format(datetime.datetime.now())
-                self._settings.set(["reference_image_timestamp"], reference_image_timestamp)
-                self._settings.set(["reference_image"], relative_url["url"])
-                relative_url["reference_image_timestamp"] = reference_image_timestamp
-                self._settings.save()
-
-                ip_address = self._settings.get(["nexus_ai_ip"])
-                request_url = "http://{}:8002/upload".format(ip_address)
-                upload_img = {"media": open(relative_url["reference_image"],"rb")}
-                self._logger.info("fiberpunk debug:")
-                self._logger.info(relative_url["reference_image"])
-                self._logger.info(ip_address)
-                self._logger.info(request_url)
-                if len(ip_address)>2:
-                    try:
-                        response = requests.post(request_url, files=upload_img, timeout=5)
-                        self._logger.info(response.text)
-                        result_json = json.loads(response.text)
-                        self._logger.info("the result count:")
-                        self._logger.info(result_json["result_count"])
-                        
-                    except requests.exceptions.ConnectionError:
-                        self._logger.info("fiberpunk: requests connect error")
-                        return flask.jsonify({"error": "connect error"})
-                    except:
-                        self._logger.info("fiberpunk: requests unknow error")
-                        return flask.jsonify({"error": "unknow error"})
-
-                return flask.jsonify(relative_url)
+            relative_url = self.nexus_ai_request()
+            return flask.jsonify(relative_url)
 
 
     def take_snapshot(self, filename=None, filetype="reference_image"):
@@ -142,8 +177,6 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                 "user": "fiberpunk",
                 "repo": "OctoPrint-Nexus-AI",
                 "current": self._plugin_version,
-
-
             }
         }
 
@@ -163,5 +196,5 @@ def __plugin_load__():
         "octoprint.comm.protocol.atcommand.queuing": __plugin_implementation__.process_at_command
     }
 
-    global __plugin_helpers__
-    __plugin_helpers__ = {'check_bed': __plugin_implementation__.check_bed}
+    # global __plugin_helpers__
+    # __plugin_helpers__ = {'check_bed': __plugin_implementation__.check_bed}
