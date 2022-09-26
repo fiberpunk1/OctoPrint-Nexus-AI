@@ -1,4 +1,4 @@
-<h4>Nexus AI-0.8.6 <small>{{ _('Version') }} {{ plugin_nexus_ai_plugin_version }}</small></h4>
+<h4>Nexus AI<small>{{ _('Version') }} {{ plugin_nexus_ai_plugin_version }}</small></h4>
 <div class="row-fluid">
     <div class="well"><p>Before use this plugin, please make sure the PC  <span class="label label-info">NexusAI</span> service was opened.</p></div>
 </div>
@@ -19,9 +19,10 @@
         <label class="control-label">{{ _('Request Interval Time(s)') }}</label>
 		<div class="controls">
             <select data-bind="value: settingsViewModel.settings.plugins.nexus_ai.request_interval_time">
-                <option value=2>2</option>
-                <option value=4>4</option>
-                <option value=6>6</option>
+                <option value=4.0>4.0</option>
+                <option value=8.0>8.0</option>
+                <option value=12.0>12.0</option>
+                <option value=20.0>20.0</option>
             </select>
         </div>
 	</div>

@@ -27,24 +27,22 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
         # self.octotext_email = None
 
     def _timer_task(self):
+        self._logger.info("Fiberpunk: in timer task")
         self.nexus_ai_request()
 
     # ~~ StartupPlugin API
     def on_after_startup(self):
-        # helpers = self._plugin_manager.get_helpers("OctoText", "send_email")
-        # if helpers and "send_email" in helpers:
-        #     self.octotext_email = helpers["send_email"]
-        #     self._logger.info("Fiberpunk: get OctoText plugin helpers")
         self._logger.info("Fiberpunk: Nexus AI plugin loaded!")
 
     # ~~ EventHandlerPlugin mixin
 
     def on_event(self, event, payload):
         if event == Events.PRINT_STARTED:
-            self._logger.info("Fiberpunk: print job started!!")
-            self.repeated_timer = RepeatedTimer(self._settings.get["request_interval_time"], self._timer_task)
+            self._logger.info("Fiberpunk: print job started!!interval tiime:{}".format(self._settings.get_float(["request_interval_time"])))
+            self.repeated_timer = RepeatedTimer(self._settings.get_float(["request_interval_time"]), self._timer_task)
             self.repeated_timer.start()
         elif (event == Events.PRINT_CANCELLED) or (event == Events.PRINT_DONE) or (event == Events.PRINT_FAILED):
+            self._logger.info("Fiberpunk: print job stop!!")
             self.repeated_timer.cancel()
 
     # ~~ SimpleApiPlugin mixin
