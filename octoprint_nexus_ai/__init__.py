@@ -13,7 +13,6 @@ from email.message import EmailMessage
 from email.utils import formatdate
 
 
-
 class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                      octoprint.plugin.AssetPlugin,
                      octoprint.plugin.StartupPlugin,
@@ -25,22 +24,24 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
     def __init__(self):
         self.repeated_timer = None
         self.refer_result = None  #nexus_ai's refer result
-        self.octotext_email = None
+        # self.octotext_email = None
 
     def _timer_task(self):
         self.nexus_ai_request()
 
     # ~~ StartupPlugin API
     def on_after_startup(self):
-        helpers = self._plugin_manager.get_helpers("OctoText", "send_email")
-        if helpers and "send_email" in helpers:
-            self.octotext_email = helpers["send_email"]
-            self._logger.info("Fiberpunk: get OctoText plugin helpers")
+        # helpers = self._plugin_manager.get_helpers("OctoText", "send_email")
+        # if helpers and "send_email" in helpers:
+        #     self.octotext_email = helpers["send_email"]
+        #     self._logger.info("Fiberpunk: get OctoText plugin helpers")
+        self._logger.info("Fiberpunk: Nexus AI plugin loaded!")
 
     # ~~ EventHandlerPlugin mixin
 
     def on_event(self, event, payload):
         if event == Events.PRINT_STARTED:
+            self._logger.info("Fiberpunk: print job started!!")
             self.repeated_timer = RepeatedTimer(self._settings.get["request_interval_time"], self._timer_task)
             self.repeated_timer.start()
         elif (event == Events.PRINT_CANCELLED) or (event == Events.PRINT_DONE) or (event == Events.PRINT_FAILED):
@@ -64,7 +65,7 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
 
             ip_address = self._settings.get(["nexus_ai_ip"])
             request_url = "http://{}:8002/upload".format(ip_address)
-            result_img_url = "http://{}:8002/result.jpg".format(ip_address)
+            result_img_url = "http://{}:8002/final_result.jpg".format(ip_address)
             upload_img = {"media": open(relative_url["reference_image"],"rb")}
             self._logger.info("Fiberpunk Nexus AI :")
             self._logger.info(relative_url["reference_image"])
@@ -78,13 +79,13 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                     self._logger.info("Fiberpunk Nexus AI result count:")
                     self._logger.info(result_json["result_count"])
                     if result_json["result_count"]>0:
-                        download_file_name = os.path.join(self.get_plugin_data_folder(), "result.jpg")
-                        response = requests.get(result_img_url, timeout=20)
+                        download_file_name = os.path.join(self.get_plugin_data_folder(), "reference.jpg")
+                        self._logger.info("Fiberpunk Nexus AI download file name:")
+                        self._logger.info(download_file_name)
+                        response = requests.get(result_img_url, timeout=5)
                         if response.status_code == 200:
                             with open(download_file_name, "wb") as f:
                                 f.write(response.content)
-                            if os.path.exists(download_file_name):
-                                relative_url = {filetype: download_file_name, "url": "plugin/nexus_ai/images/{}?{:%Y%m%d%H%M%S}".format("result.jpg", datetime.datetime.now())}
 
                     
                 except requests.exceptions.ConnectionError:
