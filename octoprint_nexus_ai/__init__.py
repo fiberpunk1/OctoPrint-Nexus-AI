@@ -65,10 +65,10 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
             request_url = "http://{}:8002/upload".format(ip_address)
             result_img_url = "http://{}:8002/final_result.jpg".format(ip_address)
             upload_img = {"media": open(relative_url["reference_image"],"rb")}
-            self._logger.info("Fiberpunk Nexus AI :")
-            self._logger.info(relative_url["reference_image"])
-            self._logger.info(ip_address)
-            self._logger.info(request_url)
+            # self._logger.info("Fiberpunk Nexus AI :")
+            # self._logger.info(relative_url["reference_image"])
+            # self._logger.info(ip_address)
+            # self._logger.info(request_url)
             if len(ip_address)>2:
                 try:
                     response = requests.post(request_url, files=upload_img, timeout=5)
@@ -78,8 +78,8 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                     self._logger.info(result_json["result_count"])
                     if result_json["result_count"]>0:
                         download_file_name = os.path.join(self.get_plugin_data_folder(), "reference.jpg")
-                        self._logger.info("Fiberpunk Nexus AI download file name:")
-                        self._logger.info(download_file_name)
+                        # self._logger.info("Fiberpunk Nexus AI download file name:")
+                        # self._logger.info(download_file_name)
                         response = requests.get(result_img_url, timeout=5)
                         if response.status_code == 200:
                             with open(download_file_name, "wb") as f:
