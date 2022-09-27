@@ -7,7 +7,7 @@ Key features:
 - Low hardware requirement, it can run on machines without needing the latest high-power CPU, nor it requires GPU to function. 
 - Optimized. It can utilize Intel’s Openvino for machine vision model acceleration to boost performance. 
 
-Free to use!
+**Free to use!**
 
 Currently only available for Windows-based machines.
 
