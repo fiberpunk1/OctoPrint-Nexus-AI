@@ -3,9 +3,9 @@ Nexus AI is a server program that can detect 3D printing failures by recognizing
 Key features: 
 - Free,All features are free recognizing print issues
 - Easy to deploy.  Simply install. Just install a program on your old computer.
-- Safer and than using a cloud service
+- Safer than using a cloud service
 - Low hardware requirement, it can run on machines without needing the latest high-power CPU, nor it requires GPU to function. 
-Optimized. It can utilize Intel’s Openvino for machine vision model acceleration to boost performance. 
+- Optimized. It can utilize Intel’s Openvino for machine vision model acceleration to boost performance. 
 
 Free to use!
 
