@@ -27,6 +27,8 @@ Install via the bundled Plugin Manager or manually using this URL:
 
 > https://github.com/fiberpunk1/OctoPrint-Nexus-AI/archive/master.zip
 
+**This plugin started out as a fork of the jneiliii's [BedReady plugin](https://github.com/jneilliii/OctoPrint-BedReady)**
+
 <br>
 
 ![img](./imgs/Octoprint-6.jpg)
