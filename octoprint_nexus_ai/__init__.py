@@ -9,8 +9,8 @@ import datetime
 import json
 from octoprint.events import Events
 from octoprint.util import RepeatedTimer
-from email.message import EmailMessage
-from email.utils import formatdate
+# from email.message import EmailMessage
+# from email.utils import formatdate
 
 
 class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
@@ -152,16 +152,8 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                                                              lambda path: not is_hidden_path(path), status_code=404)))
         ]
 
-    def compare_images(self, reference_image, comparison_image):
-        return 0.5
 
-    # ~~ @ command hook
 
-    def process_at_command(self, comm, phase, command, parameters, tags=None, *args, **kwargs):
-        pass
-
-    def check_bed(self):
-        pass
 
     # ~~ Softwareupdate hook
 
@@ -176,6 +168,8 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                 "user": "fiberpunk",
                 "repo": "OctoPrint-Nexus-AI",
                 "current": self._plugin_version,
+
+                "pip": "https://github.com/fiberpunk1/OctoPrint-Nexus-AI/archive/{target_version}.zip",
             }
         }
 
@@ -192,8 +186,6 @@ def __plugin_load__():
     __plugin_hooks__ = {
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
         "octoprint.server.http.routes": __plugin_implementation__.route_hook,
-        "octoprint.comm.protocol.atcommand.queuing": __plugin_implementation__.process_at_command
+        
     }
 
-    # global __plugin_helpers__
-    # __plugin_helpers__ = {'check_bed': __plugin_implementation__.check_bed}
