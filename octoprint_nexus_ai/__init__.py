@@ -152,9 +152,6 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
                                                              lambda path: not is_hidden_path(path), status_code=404)))
         ]
 
-
-
-
     # ~~ Softwareupdate hook
 
     def get_update_information(self):
