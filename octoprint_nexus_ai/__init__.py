@@ -162,7 +162,7 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
 
                 # version check: github repository
                 "type": "github_release",
-                "user": "fiberpunk",
+                "user": "fiberpunk1",
                 "repo": "OctoPrint-Nexus-AI",
                 "current": self._plugin_version,
 
