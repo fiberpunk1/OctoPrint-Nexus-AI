@@ -27,7 +27,7 @@ class NexusAIPlugin(octoprint.plugin.SettingsPlugin,
         # self.octotext_email = None
 
     def _timer_task(self):
-        self._logger.info("Fiberpunk: in timer task")
+        #self._logger.info("Fiberpunk: in timer task")
         self.nexus_ai_request()
 
     # ~~ StartupPlugin API
